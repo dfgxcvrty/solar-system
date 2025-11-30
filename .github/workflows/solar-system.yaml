@@ -24,7 +24,7 @@ jobs:
                       os_system: macos-latest
                     - nodejs_version: 19
                       os_system: macos-latest
-        runs-on: $ {{ matrix.os_system }}
+        runs-on: ${{ matrix.os_system }}
         steps:
             - name: Checkout Repository
               uses: actions/checkout@v4
