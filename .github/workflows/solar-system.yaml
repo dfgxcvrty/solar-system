@@ -100,7 +100,7 @@ jobs:
         - name: Docker Image Test
           run: |
             docker images
-            docker run --name solar-system-app -d \
+            docker run --name ${{ vars.DOCKERHUB_USERNAME }}/solar-system-app -d \
                  -p 3000:3000 \
                  -e MONGO_URI=$MONGOURI \
                  -e MONGO_USERNAME=$MONGO_USERNAME \
