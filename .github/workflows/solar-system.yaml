@@ -15,22 +15,15 @@ env:
 jobs:
     unit-testing:
         name: Unit Testing
-        strategy:
-            matrix:
-                nodejs_version: [18, 20]
-                os_system: [ubuntu-latest, macos-latest]
-                exclude:
-                    - nodejs_version: 18
-                      os_system: macos-latest
-        runs-on: ${{ matrix.os_system }}
+        runs-on: ubuntu-latest
         steps:
             - name: Checkout Repository
               uses: actions/checkout@v4
             
-            - name: Setup NodeJS Version - ${{ matrix.nodejs_version }}
+            - name: Setup NodeJS Version - 20
               uses: actions/setup-node@v3
               with:
-                node-version: ${{ matrix.nodejs_version }}
+                node-version: 20
             
             - name: Cache NPM dependencies
               uses: actions/cache@v4
@@ -48,7 +41,7 @@ jobs:
               if: always()
               uses: actions/upload-artifact@v4
               with:
-                name: Mocha-Test-Result_${{ matrix.os_system }}_${{ matrix.nodejs_version }}
+                name: Mocha-Test-Result
                 path: test-results.xml
 
     code-coverage:
@@ -97,3 +90,9 @@ jobs:
             username: ${{ vars.DOCKERHUB_USERNAME }}
             password: ${{ secrets.DOCKERHUB_PASSWORD }}
  
+        - name: Docker Build For Testing
+          uses: docker/build-push-action@v4
+          with:
+            context: .
+            push: false
+            tags: ${{ vars.DOCKERHUB_USERNAME }}/solar-system:${{ github.sha }}
