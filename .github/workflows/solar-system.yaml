@@ -23,7 +23,6 @@ jobs:
                     - nodejs_version: 18
                       os_system: macos-latest
         runs-on: ${{ matrix.os_system }}
-        
         steps:
             - name: Checkout Repository
               uses: actions/checkout@v4
@@ -83,3 +82,17 @@ jobs:
             name: Code-Coverage-Result
             path: coverage
             retention-days: 5
+
+    docker:
+        name: Containerization
+        needs: [unit-testing, code-coverage]
+        runs-on: ubuntu-latest
+        steps:
+        - name: Checkout Repo
+          uses: actions/checkout@v4
+        
+        - name: Dockerhub Login
+          uses: docker/login-action@v3
+          with:
+            username: ${{ vars.DOCKERHUB_USERNAME }}
+            password: ${{ secrets.DOCKERHUB_PASSWORD }}
